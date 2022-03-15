@@ -5,7 +5,7 @@ from torch import nn
 from torch.nn import functional as F
 
 from backbone import mobilenetv3
-from .. import resnet
+import resnet
 from backbone._utils import IntermediateLayerGetter
 from ._utils import _SimpleSegmentationModel, _load_weights
 from .fcn import FCNHead

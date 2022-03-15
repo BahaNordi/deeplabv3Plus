@@ -2,8 +2,8 @@ from typing import Optional
 
 from torch import nn
 
-from .. import resnet
-from .._utils import IntermediateLayerGetter
+import resnet
+from backbone._utils import IntermediateLayerGetter
 from ._utils import _SimpleSegmentationModel, _load_weights
 
 

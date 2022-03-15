@@ -4,9 +4,9 @@ from typing import Any, Dict
 from torch import nn, Tensor
 from torch.nn import functional as F
 
-from ...utils import _log_api_usage_once
-from .. import mobilenetv3
-from .._utils import IntermediateLayerGetter
+from backbone.utils import _log_api_usage_once
+from backbone import mobilenetv3
+from backbone._utils import IntermediateLayerGetter
 from ._utils import _load_weights
 
 
