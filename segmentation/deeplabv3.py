@@ -56,6 +56,29 @@ class DeepLabHead(nn.Sequential):
         )
 
 
+class DeepLabHeadV3Plus(nn.Module):
+    def __init__(self, in_channels: int, num_classes: int):
+        super(DeepLabHeadV3Plus, self).__init__()
+        self.project = nn.Sequential(
+            nn.Conv2d(256, 64, 1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+        )
+        self.aspp = ASPP(in_channels, [12, 24, 36])
+        self.classifier = nn.Sequential(
+            nn.Conv2d(256+64, 256, 3, padding=1, bias=False), # sabz 256 sorati 64
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            nn.Conv2d(256, num_classes, 1)
+        )
+
+    def forward(self, feature):
+        low_level_feature = self.project(feature['low'])
+        output_feature = self.aspp(feature['out'])
+        output_feature = F.interpolate(output_feature, size=low_level_feature.shape[2:], mode='bilinear')
+        concat_feature = torch.cat((low_level_feature, output_feature), dim=1)
+        return self.classifier(concat_feature)
+
 class ASPPConv(nn.Sequential):
     def __init__(self, in_channels: int, out_channels: int, dilation: int) -> None:
         modules = [

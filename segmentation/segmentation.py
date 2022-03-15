@@ -2,7 +2,7 @@ from backbone._utils import IntermediateLayerGetter
 from backbone._internally_replaced_utils import load_state_dict_from_url
 from backbone import mobilenetv3
 import resnet
-from .deeplabv3 import DeepLabHead, DeepLabV3
+from .deeplabv3 import DeepLabHead, DeepLabV3, DeepLabHeadV3Plus
 from .fcn import FCN, FCNHead
 from .lraspp import LRASPP
 
@@ -49,6 +49,8 @@ def _segm_model(name, backbone_name, num_classes, aux, pretrained_backbone=True)
     return_layers = {out_layer: 'out'}
     if aux:
         return_layers[aux_layer] = 'aux'
+    if name == 'deeplabv3plus':
+        return_layers['layer1'] = 'low'
     backbone = IntermediateLayerGetter(backbone, return_layers=return_layers)
 
     aux_classifier = None
@@ -57,7 +59,8 @@ def _segm_model(name, backbone_name, num_classes, aux, pretrained_backbone=True)
 
     model_map = {
         'deeplabv3': (DeepLabHead, DeepLabV3),
-        'fcn': (FCNHead, FCN),
+        'deeplabv3plus': (DeepLabHeadV3Plus, DeepLabV3),
+        'fcn': (FCNHead, FCN)
     }
     classifier = model_map[name][0](out_inplanes, num_classes)
     base_model = model_map[name][1]
@@ -71,7 +74,7 @@ def _load_model(arch_type, backbone, pretrained, progress, num_classes, aux_loss
         aux_loss = True
         kwargs["pretrained_backbone"] = False
     model = _segm_model(arch_type, backbone, num_classes, aux_loss, **kwargs)
-    if pretrained:
+    if pretrained and arch_type != 'deeplabv3plus':
         _load_weights(model, arch_type, backbone, progress)
     return model
 
@@ -146,6 +149,19 @@ def deeplabv3_resnet50(pretrained=False, progress=True,
     """
     return _load_model('deeplabv3', 'resnet50', pretrained, progress, num_classes, aux_loss, **kwargs)
 
+
+def deeplabv3plus_resnet50(pretrained=False, progress=True,
+                   num_classes=21, aux_loss=None, **kwargs):
+    """Constructs a DeepLabV3 model with a ResNet-50 backbone.
+
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
+            contains the same classes as Pascal VOC
+        progress (bool): If True, displays a progress bar of the download to stderr
+        num_classes (int): number of output classes of the model (including the background)
+        aux_loss (bool): If True, it uses an auxiliary loss
+    """
+    return _load_model('deeplabv3plus', 'resnet50', pretrained, progress, num_classes, aux_loss, **kwargs)
 
 
 def deeplabv3_resnet101(pretrained=False, progress=True,

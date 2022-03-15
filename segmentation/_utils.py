@@ -24,9 +24,9 @@ class _SimpleSegmentationModel(nn.Module):
         features = self.backbone(x)
 
         result = OrderedDict()
-        x = features["out"]
-        x = self.classifier(x)
-        x = F.interpolate(x, size=input_shape, mode="bilinear", align_corners=False)
+        # x = features["out"]
+        x = self.classifier(features)
+        x = F.interpolate(x, size=input_shape, mode='bilinear', align_corners=False)
         result["out"] = x
 
         if self.aux_classifier is not None:
