@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 
-from _internally_replaced_utils import load_state_dict_from_url
+from backbone._internally_replaced_utils import load_state_dict_from_url
 from backbone.utils import _log_api_usage_once
 
 
