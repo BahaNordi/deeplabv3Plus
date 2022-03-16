@@ -60,7 +60,7 @@ class DeepLabHeadV3Plus(nn.Module):
     def __init__(self, in_channels: int, num_classes: int):
         super(DeepLabHeadV3Plus, self).__init__()
         self.project = nn.Sequential(
-            nn.Conv2d(256, 128, 1),
+            nn.Conv2d(256, 64, 1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
         )
