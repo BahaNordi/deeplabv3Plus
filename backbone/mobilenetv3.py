@@ -1,18 +1,14 @@
 import warnings
 from functools import partial
 from typing import Any, Callable, List, Optional, Sequence
-
 import torch
 from torch import nn, Tensor
-
 from backbone._internally_replaced_utils import load_state_dict_from_url
 from backbone.misc import Conv2dNormActivation, SqueezeExcitation as SElayer
 from backbone.utils import _log_api_usage_once
 from backbone._utils import _make_divisible
 
-
 __all__ = ["MobileNetV3", "mobilenet_v3_large", "mobilenet_v3_small"]
-
 
 model_urls = {
     "mobilenet_v3_large": "https://download.pytorch.org/models/mobilenet_v3_large-8738ca79.pth",
