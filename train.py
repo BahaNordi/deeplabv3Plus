@@ -190,7 +190,7 @@ def get_args_parser(add_help=True):
     parser.add_argument('--dataset', default='coco', help='dataset name')
     parser.add_argument('--model', default='fcn_resnet101', help='model')
     parser.add_argument('--aux-loss', action='store_true', help='auxiliar loss')
-    parser.add_argument('--device', default='cpu', help='device')
+    parser.add_argument('--device', default='gpu', help='device')
     parser.add_argument('-b', '--batch-size', default=8, type=int)
     parser.add_argument('--epochs', default=30, type=int, metavar='N',
                         help='number of total epochs to run')
